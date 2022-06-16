@@ -95,10 +95,20 @@ class UserController {
     }
   }
 
+  async getUserById(req, res, next) {
+    try {
+      const {id} = req.props
+      const users = await userService.getOneUsers(id);
+      return res.json(users);
+    } catch (e) {
+      next(e);
+    }
+  }
+
   async getUserInfo(req, res, next) {
     try {
       const { userId } = req.body;
-      const userInfo = await userInfoService.findUserInfo(userId);
+      const userInfo = await userInfoService.getOneUsers(userId);
       console.log(userInfo)
       return res.json(userInfo);
     } catch (e) {

@@ -70,6 +70,13 @@ class UserinfoService {
       return false
     } 
   }
+
+  async getOneUsers(id) {
+    const users = await UserInfoSchema.findOne({user_id: id});
+    return users;
+  }
+
+
 }
 
 module.exports = new UserinfoService();

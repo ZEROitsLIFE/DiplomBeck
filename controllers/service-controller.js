@@ -22,15 +22,15 @@ class ServiceController {
         
     }
 
-    // async getOneService(req, res, next){
-    //     try {
-    //         const {id} = req.params
-    //         const service = await service_service.getOneService(id);
-    //         return res.json(service)
-    //     } catch (error) {
-    //        next(error) 
-    //     }
-    // }
+    async getOneService(req, res, next){
+        try {
+            const {id} = req.params
+            const service = await service_service.getOneService(id);
+            return res.json(service)
+        } catch (error) {
+           next(error) 
+        }
+    }
 }
 
 

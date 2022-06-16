@@ -1,4 +1,5 @@
 const basket_service = require('../service/basket-service')
+const { getUserById } = require('./user-controller')
 
 class BasketController {
     async create(req, res, next) {
@@ -40,7 +41,8 @@ class BasketController {
         try {
             const {id} = req.body;
             const basket = await basket_service.UserById(id)
-            return res.status(200).json(basket)
+            const response = getUserById(basket._id)
+            return res.json(response)
         } catch (error) {
             
         }
