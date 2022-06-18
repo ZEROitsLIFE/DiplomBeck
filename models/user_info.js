@@ -5,7 +5,7 @@ const UserInfoSchema = new Schema({
     first_name: {type: String, required:true},
     phone_number: {type: String, unique: true, required:true},
     about: {type: String},
-    sex:{type: String, enum: ['Male', 'Female','ELSE'], default:'ELSE'}
+    // sex:{type: String, enum: ['Male', 'Female','ELSE'], default:'ELSE'}
 })
 
 module.exports = model('UserInfo', UserInfoSchema);

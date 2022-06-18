@@ -9,6 +9,7 @@ router.post('/create',authMiddleware, checkRoleMidleware('ADMIN'), historyContro
 router.get('/findAll', historyController.getAll);
 // router.post('/findOne/:id', serviceController.getOneService);
 router.post('/reserved', historyController.isReserved);
+router.post('/reservednow', historyController.reserved);
 
 
 
