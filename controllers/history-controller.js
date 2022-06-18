@@ -31,6 +31,16 @@ console.log("History>",history)
       next(error);
     }
   }
+  
+  async complited(req, res, next) {
+    try {
+      const { id } = req.body;
+      const history = await history_service.compoled(id);
+      return res.json(history);
+    } catch (error) {
+      next(error);
+    }
+  }
 
   async isReserved(req, res, next) {
     try {

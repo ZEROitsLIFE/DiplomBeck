@@ -30,6 +30,16 @@ class HistoryService {
     return hist;
   }
 
+
+  async compoled(_id) {
+    const hist = await HistoryModel.findByIdAndUpdate(
+      { _id },
+      { complited: true }
+    );
+    console.log(hist);
+    return hist;
+  }
+
   async isReserved(id) {
     const hist = await HistoryModel.findOne({ _id: id });
     if (hist.reserved) return true;

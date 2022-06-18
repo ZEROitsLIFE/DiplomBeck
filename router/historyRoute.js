@@ -8,8 +8,9 @@ const checkRoleMidleware = require('../middlewares/checkRoleMidleware');
 router.post('/create',authMiddleware, checkRoleMidleware('ADMIN'), historyController.create);
 router.get('/findAll', historyController.getAll);
 // router.post('/findOne/:id', serviceController.getOneService);
-router.post('/reserved', historyController.isReserved);
+router.post('/reservedis', historyController.isReserved);
 router.post('/reservednow', historyController.reserved);
+router.post('/complitednow', historyController.complited);
 
 
 
