@@ -23,7 +23,6 @@ class UserinfoService {
       user_id,
       first_name,
       phone_number: phoneNumber,
-
     });
     return { ...userInfo };
   }
@@ -33,26 +32,40 @@ class UserinfoService {
       throw ApiError.BadRequest(`Ід не задано`);
     }
 
-    console.log(id)
-    const data = UserInfoSchema.findOne({user_id: id})
+    console.log(id);
+    const data = UserInfoSchema.findOne({ user_id: id });
     if (!data) {
       ApiError.BadRequest(`Користувача не знайдено`);
     }
 
-    return data ;
+    return data;
   }
 
-  async changeUserInfo(id,name,phone) {
-     const dataTemp = UserInfoSchema.findOne({user_id: id});
-    if(!dataTemp) {
-      ApiError.BadRequest(`Користувача не знайдено`);
+  async changeUserInfo(userid, number, name) {
+    console.log(userid, number, name);
+    let a = number;
+    let b = name;
+    const data = await UserInfoSchema.findOne({ user_id: userid });
+    console.log(data);
+
+    console.log(a, b);
+    if (a === null) {
+      a = data.phone_number;
     }
+    if (b === null) {
+      b = data.first_name;
+    }
+    console.log(a, b);
 
-     if(!name) {name=dataTemp.first_name};
-     if(!phone) {phone=dataTemp.phone_number};
+    await UserInfoSchema.updateOne({_id:data.id}, {
+      phone_number: a,
+      first_name: b,
+    });
 
-     const response = UserInfoSchema.findOneAndUpdate({user_id: id},{first_name: name, phone_number: number})
-     return response;
+    const dataUpdate = await UserInfoSchema.findOne({ user_id: userid });
+    console.log("first", dataUpdate);
+
+    return dataUpdate;
   }
 
   async checkNumber(phone_number) {
@@ -65,18 +78,17 @@ class UserinfoService {
     console.log(userPhone);
     try {
       if (userPhone.phone_number) {
-        return true;}
+        return true;
+      }
     } catch (error) {
-      return false
-    } 
+      return false;
+    }
   }
 
   async getOneUsers(id) {
-    const users = await UserInfoSchema.findOne({user_id: id});
+    const users = await UserInfoSchema.findOne({ user_id: id });
     return users;
   }
-
-
 }
 
 module.exports = new UserinfoService();

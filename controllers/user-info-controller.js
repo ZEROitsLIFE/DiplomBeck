@@ -25,9 +25,10 @@ class HistoryController {
  
   async chamgeUserInfo(req, res, next) {
     try {
-      const { user_id, phone_number, first_name } = req.body;
-      const data = info_service.changeUserInfo(user_id, phone_number, first_name)
-      return res.json(data);
+      const { user_id, number,name } = req.body;
+    const info = await info_service.changeUserInfo(user_id, number,name)
+   console.log(info)
+      return res.json(info);
     } catch (error) {
       console.log(error);
     }
