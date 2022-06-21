@@ -40,14 +40,26 @@ class BasketController {
     async getUserById(req, res, next){
         try {
             const {id} = req.body;
+            console.log("sssssssssssssssssssssssssssssssssssss",id)
             const basket = await basket_service.UserById(id)
-            const response = getUserById(basket._id)
-            return res.json(response)
+            return res.json(basket)
         } catch (error) {
-            
+            next(e)
         }
     }
-
+    
+    async getBasketById(req, res, next){
+        try {
+            console.log("Start Basket find")
+            const {userId} = req.body;
+            const basket = await basket_service.BasketById(userId)
+            
+            console.log("End Basket find")
+            return res.json(basket)
+        } catch (error) {
+            next(e)
+        }
+    }
 
     // async getOneService(req, res, next){
     //     try {

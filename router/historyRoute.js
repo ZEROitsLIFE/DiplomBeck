@@ -11,6 +11,8 @@ router.get('/findAll', historyController.getAll);
 router.post('/reservedis', historyController.isReserved);
 router.post('/reservednow', historyController.reserved);
 router.post('/complitednow', historyController.complited);
+router.post('/findByDate', historyController.findByDate);
+router.post('/findByService', historyController.findByservice);
 
 
 

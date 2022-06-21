@@ -28,7 +28,14 @@ class BasketService {
       }
 
       async UserById(id) {
-        const basket = await BasketModel.findOne({_id: id})
+        const basket = await BasketModel.findOne({user: id})
+        console.log("Basket= ", basket)
+      return basket;
+      }
+
+      async BasketById(userId) {
+        const basket = await BasketModel.findOne({user: userId})
+        console.log("Basket= ", basket)
       return basket;
       }
 }

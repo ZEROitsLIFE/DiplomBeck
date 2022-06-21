@@ -9,6 +9,7 @@ router.post('/create',checkRoleMidleware('ADMIN'), basketController.create);
 router.post('/add',authMiddleware, basketController.add);
 router.post('/findAll', basketController.findAllHistoryUser);
 router.post('/findUser', basketController.getUserById);
+router.post('/findBasketbyid', basketController.getBasketById);
 
 
 

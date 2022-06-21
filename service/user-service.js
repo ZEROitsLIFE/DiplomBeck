@@ -97,10 +97,7 @@ class UserService {
     return users;
   }
 
-  async getOneUsers(id) {
-    const users = await UserModel.findOne(id);
-    return users;
-  }
+
 }
 
 module.exports = new UserService();

@@ -1,6 +1,9 @@
 const type = require("mongoose/lib/schema/operators/type");
 const ApiError = require("../exceptions/api-error");
+const basket = require("../models/basket");
+const historyStore = require("../models/history-store");
 const HistoryModel = require("../models/history-store");
+const userModel = require("../models/user-model");
 let history;
 class HistoryService {
   async create(service, date, time) {
@@ -15,29 +18,37 @@ class HistoryService {
         time: time,
       }));
     } else {
-      throw ApiError.BadRequest('Час зафйнятий')
+      throw ApiError.BadRequest("Час зафйнятий");
     }
 
     // return null
   }
 
-  async reserved(_id) {
-    const hist = await HistoryModel.findByIdAndUpdate(
-      { _id },
-      { reserved: true }
-    );
-    console.log(hist);
+  async reserved(_id,user_id,basket_id) {
+    console.log("id",_id)
+    console.log("user_id",user_id)
+    console.log("BAsket",basket_id)
+    
+    await HistoryModel.updateOne(
+      { _id:_id },
+      {basket: basket_id,reserved: true }
+      );
+
+    const hist = historyStore.findOne({_id:_id})  
+      
+      console.log("hist",hist.obj)
     return hist;
   }
 
-
   async compoled(_id) {
-    const hist = await HistoryModel.findByIdAndUpdate(
-      { _id },
+    const hist = await HistoryModel.updateOne(
+      { _id: _id },
       { complited: true }
     );
-    console.log(hist);
-    return hist;
+
+    const history = historyStore.findOne({_id:_id})  
+    console.log("Hist=>", hist);
+    return history;
   }
 
   async isReserved(id) {
@@ -51,13 +62,18 @@ class HistoryService {
     return checkHistory;
   }
 
+  async getHistoryOnReserved() {
+    const checkHistory = await HistoryModel.find({ reserved: true });
+    return checkHistory;
+  }
+
   async getHistoryOnDate(date) {
     const checkHistory = await HistoryModel.find({ date: date });
     return checkHistory;
   }
 
-  async getHistoryOnReserved() {
-    const checkHistory = await HistoryModel.find({ reserved: true });
+  async getHistoryOnService(serviceId) {
+    const checkHistory = await HistoryModel.find({ service: serviceId });
     return checkHistory;
   }
 }

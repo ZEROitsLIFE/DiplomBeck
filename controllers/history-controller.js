@@ -24,8 +24,8 @@ console.log("History>",history)
 
   async reserved(req, res, next) {
     try {
-      const { id } = req.body;
-      const history = await history_service.reserved(id);
+      const { id,user_id,basket_id} = req.body;
+      const history = await history_service.reserved(id,user_id,basket_id);
       return res.json(history);
     } catch (error) {
       next(error);
@@ -51,6 +51,28 @@ console.log("History>",history)
       next(error);
     }
   }
+  
+  
+  async findByDate(req, res, next) {
+    try {
+      const { date } = req.body;
+      const history = await history_service.getHistoryOnDate(date);
+      return res.json(history);
+    } catch (error) {
+      next(error);
+    }
+  }
+  
+  async findByservice(req, res, next) {
+    try {
+      const { serviceId } = req.body;
+      const history = await history_service.getHistoryOnService(serviceId)
+      return res.json(history);
+    } catch (error) {
+      next(error);
+    }
+  }
+
 }
 
 module.exports = new HistoryController();
