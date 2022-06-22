@@ -23,6 +23,7 @@ module.exports = function(role) {
             return res.status(403).json({message: "Нет доступа: Невірний accessToken"})
         }
         
+        
         if(userData.role !== role){
             return res.status(403).json({message: "Нет доступа"})        
         }
