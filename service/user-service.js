@@ -6,13 +6,16 @@ const mailService = require("./mail-service");
 const tokenService = require("./token-service");
 const UserDto = require("../dtos/user-dto");
 const ApiError = require("../exceptions/api-error");
+const basket = require("../models/basket");
+const user_info = require("../models/user_info");
+const UsersDto = require("../dtos/service-dto");
 
 class UserService {
   async registration(email, password, role) {
     const candidate = await UserModel.findOne({ email });
     if (candidate) {
       throw ApiError.BadRequest(
-        `Пользователь с почтовым адресом ${email} уже существует`
+        `Користувач з таким почтовим ящиком ${email} вже існує`
       );
     }
     const hashPassword = await bcrypt.hash(password, 3);
@@ -25,8 +28,13 @@ class UserService {
       role: role,
     });
     try {
-      // await mailService.sendActivationMail(email, `${process.env.API_URL}/api/user/activate/${activationLink}`);
-    } catch (error) {console.log(error)}
+      await mailService.sendActivationMail(
+        email,
+        `${process.env.API_URL}/api/user/activate/${activationLink}`
+      );
+    } catch (error) {
+      console.log(error);
+    }
 
     const userDto = new UserDto(user); // id, email, isActivated, role
     const tokens = tokenService.generateTokens({ ...userDto });
@@ -52,11 +60,11 @@ class UserService {
   async login(email, password) {
     const user = await UserModel.findOne({ email });
     if (!user) {
-      throw ApiError.BadRequest("Пользователь с таким email не найден");
+      throw ApiError.BadRequest("Користуач з таким email не знайдено");
     }
     const isPassEquals = await bcrypt.compare(password, user.password);
     if (!isPassEquals) {
-      throw ApiError.BadRequest("Неверный пароль");
+      throw ApiError.BadRequest("Неправильний пароль");
     }
     const userDto = new UserDto(user);
     const tokens = tokenService.generateTokens({ ...userDto });
@@ -91,13 +99,33 @@ class UserService {
   }
 
   async getAllUsers() {
-    const users = await UserModel.findById("6299eb895a3b61323004d165");
-    // console.log(users)
-    // const userDto = new UserDto(users);
-    return users;
+    const users = await UserModel.find({ isActivated: true });
+    console.log(users);
+    // const userDtвo = users.map(data=>{
+    //   const baskets = await basket.findOne({user:data.id})
+
+    //   console.log("MASKET",baskets)
+    //
+    // })
+    const arr = [];
+    const a = await Promise.all(
+      users.map(async (data) => {
+        console.log("qqqqqqqqq", data);
+        const baskets = await basket.findOne({ user: data._id });
+        console.log("ssssssssss", baskets);
+        const userInfo = await user_info.findOne({ user_id: data._id });
+        console.log("uuuuuuuuuu", userInfo);
+        let baskt = baskets.id;
+        let _id = data._id;
+        let name = userInfo.first_name;
+        let number = userInfo.phone_number;
+        await arr.push({ baskt, _id, name, number });
+      })
+    );
+
+    console.log("SSSSS", arr);
+    return arr;
   }
-
-
 }
 
 module.exports = new UserService();

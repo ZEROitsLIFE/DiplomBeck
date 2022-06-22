@@ -6,7 +6,7 @@ class MailService {
         this.transporter = nodemailer.createTransport({
             host: process.env.SMTP_HOST,
             port: process.env.SMTP_PORT,
-            secure: false,
+            secure: true,
             auth: {
                 user: process.env.SMTP_USER,
                 pass: process.env.SMTP_PASSWORD
@@ -17,6 +17,7 @@ class MailService {
 
 
     async sendActivationMail(to, link) {
+        console.log(":ss")
         try {
             await this.transporter.sendMail({
                 from: process.env.SMTP_USER,
@@ -37,23 +38,24 @@ class MailService {
         
     }
 
-    // async sendByuMail(to, history) {
-    //     await this.transporter.sendMail({
-    //         from: process.env.SMTP_USER,
-    //         to,
-    //         subject: 'Покупка послуги' + history.service.name,
-    //         text: '',
-    //         html:
-    //             `
-    //                 <div>
-    //                     <h1>Ви замовили помлугу ${history.service.name} на сайті Relax+ </h1>
-    //                     <p>У з в'язку з війною ми змушені відключити оплату карткою. З Вами зв'яжется наш менеджер. Чекайте.</p>
-    //                     <p>Крнтактний номер менеджера +38023512478</p>
-    //                     <p>Дякуємо за покупку</p>
-    //                 </div>
-    //             `
-    //     })
-    // }
+    async sendByuMail(to, service,time,date) {
+        await this.transporter.sendMail({
+            from: process.env.SMTP_USER,
+            to,
+            subject: 'Покупка послуги' + service,
+            text: '',
+            html:
+                `
+                    <div>
+                        <h1>Ви замовили поcлугу ${service} на сайті Relax+ </h1>
+                        <p>Послугу буде проведено ${date} в ${time} годині</p>
+                        <p>У з в'язку з війною ми змушені відключити оплату карткою. З Вами зв'яжется наш менеджер. Чекайте.</p>
+                        <p>Крнтактний номер менеджера +38023512478</p>
+                        <p>Дякуємо за покупку</p>
+                    </div>
+                `
+        })
+    }
 }
 
 module.exports = new MailService();
